@@ -1,0 +1,165 @@
+<kt-portlet>
+
+    <!-- start:: Header select munu "Back | Reset | Save" -->
+    <kt-portlet-header [title]="getComponentTitle()" [class]="'kt-portlet__head--lg'" [viewLoading$]="loading$">
+		<ng-container ktPortletTools>
+			<a [routerLink]="['../../']" class="btn btn-secondary kt-margin-r-10" mat-raised-button matTooltip="Back to the users list">
+				<i class="la la-arrow-left"></i>
+				<span class="kt-hidden-mobile">Back</span>
+			</a>
+			<a href="javascript:;" class="btn btn-secondary kt-margin-r-10" (click)="reset()" [disabled]="selectedTab !== 0" mat-raised-button matTooltip="Reset changes">
+				<i class="la la-cog"></i>
+				<span class="kt-hidden-mobile">Reset</span>
+			</a>
+			<a href="javascript:;" class="btn btn-primary kt-margin-r-10" color="primary" (click)="onSumbit(false)" mat-raised-button matTooltip="Save & Continue">
+				<span class="kt-hidden-mobile">Save</span>
+			</a>
+			<button mat-icon-button [matMenuTriggerFor]="menu" color="primary">
+				<mat-icon>more_vert</mat-icon>
+			</button>
+			<mat-menu #menu="matMenu">
+				<button mat-menu-item color="primary" (click)="onSumbit(true)">Save & Exit</button>
+				<button mat-menu-item color="primary">Save & Duplicate</button>
+				<button mat-menu-item color="primary" (click)="onSumbit(false)">Save & Continue</button>
+			</mat-menu>
+		</ng-container>
+	</kt-portlet-header>
+    <!-- end:: Header select munu "Back | Reset | Save" -->
+
+    <!-- start:: BODY ENTER INFO DESCRIPTION -->
+    <kt-portlet-body>
+        <!-- start:: Tab Header menu -->
+		<mat-tab-group [(selectedIndex)]="selectedTab">
+			<mat-tab>
+				<ng-template mat-tab-label>
+					<i class="mat-tab-label-icon fa fa-user"></i>
+					Basic info
+                </ng-template>
+                
+                <!-- start:: Form -->
+				<ng-template matTabContent>
+					<div *ngIf="user">
+						<form [formGroup]="userForm" class="kt-form kt-form--group-seperator-dashed">
+
+							<kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="10000" (close)="onAlertClose($event)">
+								Oh snap! Change a few things up and try submitting again.
+							</kt-alert>
+
+							<div class="kt-form__section kt-form__section--first">
+								<div class="form-group kt-form__group row">
+									<div class="col-lg-4 kt-margin-bottom-20-mobile">
+										<mat-form-field class="mat-form-field-fluid">
+											<input matInput placeholder="ID Number" formControlName="idNumber"/>
+											<mat-error>ID Number is
+												<strong>required</strong>
+											</mat-error>
+											<mat-hint align="start">Please enter
+												<strong>ID Number</strong>
+											</mat-hint>
+										</mat-form-field>
+									</div>
+									<div class="col-lg-4 kt-margin-bottom-20-mobile">
+										<mat-form-field class="mat-form-field-fluid">
+											<input matInput placeholder="Fullname" formControlName="fullname"/>
+											<mat-error>Fullname is
+												<strong>required</strong>
+											</mat-error>
+											<mat-hint align="start">Please enter
+												<strong>Fullname</strong>
+											</mat-hint>
+										</mat-form-field>
+									</div>
+
+									<div class="col-lg-4 kt-margin-bottom-20-mobile">
+										<mat-form-field class="mat-form-field-fluid">
+											<input type="email" matInput placeholder="Email" formControlName="email"/>
+											<mat-error>Email is
+												<strong>required</strong>
+											</mat-error>
+											<mat-hint align="start">Please enter
+												<strong>Email</strong>
+											</mat-hint>
+										</mat-form-field>
+									</div>
+								</div>
+
+								<div class="form-group kt-form__group row">
+									<div class="col-lg-4 kt-margin-bottom-20-mobile">
+										<mat-form-field class="mat-form-field-fluid">
+											<input matInput placeholder="Phone" formControlName="phone"/>
+											<mat-error>Phone is
+												<strong>required</strong>
+											</mat-error>
+											<mat-hint align="start">Please enter
+												<strong>Phone</strong>
+											</mat-hint>
+										</mat-form-field>
+									</div>
+									<div class="col-lg-4 kt-margin-bottom-20-mobile">
+										<mat-form-field class="mat-form-field-fluid" >
+											<input matInput [matDatepicker]="birthdatePicker" placeholder="Date of Birth" formControlName="bithdate"/>
+											<mat-datepicker-toggle matSuffix [for]="birthdatePicker"></mat-datepicker-toggle>
+											<mat-datepicker #birthdatePicker></mat-datepicker>
+											<mat-error>Birth Date is
+												<strong>required </strong>(MM/DD/YYYY)
+											</mat-error>
+											<mat-hint align="start">Please enter
+												<strong>Birth Date (MM/DD/YYYY)</strong>
+											</mat-hint>
+										</mat-form-field>
+									</div>
+
+									<div class="col-lg-4 kt-margin-bottom-20-mobile">
+										<mat-form-field class="mat-form-field-fluid">
+											<input matInput placeholder="Address Line" formControlName="addressLine"/>
+											<mat-hint align="start">Please enter
+												<strong>Address Line</strong>
+											</mat-hint>
+										</mat-form-field>
+									</div>
+								</div>
+							</div>
+
+						</form>
+					</div>
+                </ng-template>
+                <!-- end:: Form -->
+            </mat-tab>
+            
+            <!-- Tab hidden Add NewUser Mode -->
+            <mat-tab [disabled]="!user || !user.idNumber">
+				<ng-template mat-tab-label>
+					<i class="mat-tab-label-icon fa fa-address-book"></i>
+					User House
+				</ng-template>
+				<ng-template matTabContent>
+					<kt-house [(houseSubject)]="houseSubject"></kt-house>
+				</ng-template>
+			</mat-tab>
+
+			<mat-tab [disabled]="!user || !user.idNumber">
+				<ng-template mat-tab-label>
+					<i class="mat-tab-label-icon fa fa-address-book"></i>
+					User Roles
+				</ng-template>
+				<ng-template matTabContent>
+					<kt-user-role [(rolesSubject)]="rolesSubject"></kt-user-role>
+				</ng-template>
+			</mat-tab>
+
+			<mat-tab *ngIf="user" [disabled]="!user || !user.idNumber">
+				<ng-template mat-tab-label>
+					<i class="mat-tab-label-icon fa fa-exchange-alt"></i>
+					Change password
+				</ng-template>
+				<ng-template matTabContent>
+					<kt-change-password [userId]="user.idNumber"></kt-change-password>
+				</ng-template>
+			</mat-tab>
+
+        </mat-tab-group>
+        <!-- end:: Tab Header menu -->
+	</kt-portlet-body>
+    <!-- end:: BODY ENTER INFO DESCRIPTION -->
+
+</kt-portlet>
