@@ -9,7 +9,7 @@ import { QueryParamsModel, QueryResultsModel } from '../../_base/crud';
 import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
 
-const API_USERS_URL = 'api/users';
+const API_USERS_URL = 'https://localhost:44320/api/user';
 const API_PERMISSION_URL = 'api/permissions';
 const API_ROLES_URL = 'api/roles';
 
