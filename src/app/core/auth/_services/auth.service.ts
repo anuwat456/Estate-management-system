@@ -10,7 +10,7 @@ import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
 
 const API_BASE_URL = 'https://localhost:44367/';
-const API_USERS_URL = API_BASE_URL + 'api/AccountUser/Register';
+const API_USERS_URL = API_BASE_URL + 'api/AccountUser/';
 const API_PERMISSION_URL = API_BASE_URL + 'api/AccountUser/permissions';
 const API_ROLES_URL = API_BASE_URL + 'api/AccountUser/roles';
 
@@ -19,7 +19,7 @@ export class AuthService {
     constructor(private http: HttpClient) {}
     // Authentication/Authorization
     login(email: string, password: string): Observable<User> {
-        return this.http.post<User>(API_USERS_URL, { email, password });
+        return this.http.post<User>(API_USERS_URL + "Login", { email, password });
     }
 
     getUserByToken(): Observable<User> {
@@ -32,7 +32,7 @@ export class AuthService {
     register(user: User): Observable<any> {
         const httpHeaders = new HttpHeaders();
         httpHeaders.set('Content-Type', 'application/json');
-        return this.http.post<User>(API_USERS_URL, user, { headers: httpHeaders })
+        return this.http.post<User>(API_USERS_URL + "Register", user, { headers: httpHeaders })
             .pipe(
                 map((res: User) => {
                     return res;
@@ -57,7 +57,7 @@ export class AuthService {
 
 
     getAllUsers(): Observable<User[]> {
-		return this.http.get<User[]>(API_USERS_URL);
+		return this.http.get<User[]>(API_USERS_URL + "Register");
     }
 
     getUserById(userId: number): Observable<User> {
